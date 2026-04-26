@@ -1,5 +1,7 @@
 package ito.data;
 
+import java.util.Objects;
+
 /*
     Reglas del negocios
     1) El semestre debe ser un valor entre 1 y 13
@@ -14,22 +16,18 @@ public class Alumno {
     private String carrera; // n byyes en función de la cantidad de caracteres de la cadena
     private float promedio; // 4 bytes
     private Genero genero;// n bytes en funcion de la cantidad de caracteres de la cadena
-    private final byte MIN_SEM=1;
-    private final byte MAX_SEM=13;
-    private final float MIN_PROM=0;
-    private final float MAX_PROM=100;
+    private static final byte MIN_SEM=1;
+    private static final byte MAX_SEM=13;
+    private static final float MIN_PROM=0;
+    private static final float MAX_PROM=100;
 
     public Alumno(long numeroControl, String nombre, byte semestre, String carrera, float promedio, Genero genero) {
-       if(semestre<MIN_SEM || semestre>MAX_SEM)
-           throw new IllegalArgumentException("El semestre es invalido!!");
-       if(promedio<MIN_PROM || promedio>MAX_PROM)
-           throw new IllegalArgumentException("El promedio no es valido!!");
 
        this.numeroControl = numeroControl;
        this.nombre = nombre;
-       this.semestre = semestre;
+       setSemestre(semestre);
        this.carrera = carrera;
-       this.promedio = promedio;
+       setPromedio(promedio);
        this.genero = genero;
 
     }
@@ -63,7 +61,7 @@ public class Alumno {
     }
 
     public void setSemestre(byte semestre){
-        if(semestre>=1 && semestre<=13)
+        if(semestre>=MIN_SEM && semestre<=MAX_SEM)
             this.semestre = semestre;
         else
             throw new IllegalArgumentException("El semestre es invalido!!");
@@ -74,9 +72,27 @@ public class Alumno {
     }
 
     public void setPromedio(float promedio) {
-        if(promedio<0 || promedio>100)
+        if(promedio<MIN_PROM || promedio>MAX_PROM)
             throw new IllegalArgumentException("El promedio no es valido!!");
         this.promedio = promedio;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof Alumno alumno)) return false;
+
+        return numeroControl == alumno.numeroControl && semestre == alumno.semestre && Float.compare(promedio, alumno.promedio) == 0 && Objects.equals(nombre, alumno.nombre) && Objects.equals(carrera, alumno.carrera) && genero == alumno.genero;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Long.hashCode(numeroControl);
+        result = 31 * result + Objects.hashCode(nombre);
+        result = 31 * result + semestre;
+        result = 31 * result + Objects.hashCode(carrera);
+        result = 31 * result + Float.hashCode(promedio);
+        result = 31 * result + Objects.hashCode(genero);
+        return result;
     }
 
     public String toString(){
