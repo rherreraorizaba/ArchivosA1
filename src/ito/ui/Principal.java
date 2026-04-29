@@ -1,0 +1,116 @@
+package ito.ui;
+
+import ito.data.Alumno;
+import ito.data.ListaAlumnos;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Principal {
+
+    private Validacion validacion;
+    private Visualizacion visualizacion;
+    private ListaAlumnos alumnos;
+    private Scanner input = new Scanner(System.in);
+    private String menu;
+
+    public Principal(){
+        validacion= new Validacion(input);
+        visualizacion = new Visualizacion();
+        alumnos= new ListaAlumnos("alumnos.txt");
+        creaMenu();
+    }
+
+    private void creaMenu(){
+        menu="Menu principal\n";
+        menu+="1.- Agregar alumno\n";
+        menu+="2.- Eliminar alumno\n";
+        menu+="3.- Modificar alumno\n";
+        menu+="4.- Consultar alumno\n";
+        menu+="5.- Listar alumnos\n";
+        menu+="6.- Salir\n";
+        menu+="Proporciona opcion:[1..6]:";
+    }
+
+    private byte leerOpcion(){
+        return (byte)validacion.leerLong(menu,1,6,"Opcion invalida!!");
+    }
+
+    private void agregarAlumno(){
+        Alumno alumno=validacion.leerAlumno();
+        try {
+            alumnos.addAlumno(alumno);
+        }catch(IllegalArgumentException e){
+            System.err.println(e.getMessage());
+            System.err.println("El alumno no fue agregado!!");
+        }
+    }
+
+    private void eliminarAlumno(){
+        long nc=validacion.leerNumeroControl();
+        Alumno alumno = alumnos.getAlumno(nc);
+        if(alumno!=null){
+            visualizacion.visualizaAlumno(alumno);
+            if(validacion.leerBoolean("Es el alumno a eliminar[Si/No]","Si","No","Debes escribir Si o No!!"))
+                alumnos.deleteAlumno(alumno);
+        }else
+            System.out.println("El alumno no se localizo!!");
+    }
+
+    private void modificaAlumno(Alumno alumno){
+       String menu="Menu de modificacion\n";
+       menu+="1.- Modificar nombre\n";
+       menu+="2.- Modificar carrera\n";
+       menu+="3.- Modificar semestre\n";
+       menu+="4.- Modificar promedio\n";
+       menu+="Indica la opción:[1..4]:";
+       byte opcion=(byte)validacion.leerLong(menu,1,4,"Opcion equivocada!!");
+       switch(opcion){
+           case 1:alumno.setNombre(validacion.leerNombre());break;
+           case 2:alumno.setCarrera(validacion.leerCarrera());break;
+           case 3:alumno.setSemestre(validacion.leerSemestre());break;
+           case 4:alumno.setPromedio(validacion.leerPromedio());
+       }
+    }
+
+    private void modificarAlumno(){
+        long nc=validacion.leerNumeroControl();
+        Alumno alumno = alumnos.getAlumno(nc);
+        if(alumno!=null) {
+            visualizacion.visualizaAlumno(alumno);
+            modificaAlumno(alumno);
+        }else
+            System.out.println("El alumno no se localizo!!");
+    }
+
+    private void mostrarAlumno(){
+        long nc=validacion.leerNumeroControl();
+        Alumno alumno = alumnos.getAlumno(nc);
+        if(alumno!=null)
+            visualizacion.visualizaAlumno(alumno);
+        else
+            System.out.println("El alumno no se localizo!!");
+    }
+
+    private void listarAlumnos(){
+        visualizacion.visualizaTodos(alumnos.getAlumnos());
+    }
+
+
+    public void run() throws FileNotFoundException {
+        byte opcion;
+        do{
+            opcion=leerOpcion();
+            switch(opcion){
+                case 1: agregarAlumno();break;
+                case 2: eliminarAlumno();break;
+                case 3: modificarAlumno();break;
+                case 4: mostrarAlumno();break;
+                case 5: listarAlumnos();
+            }
+        }while(opcion!=6);
+        alumnos.salvarDatos();
+    }
+}

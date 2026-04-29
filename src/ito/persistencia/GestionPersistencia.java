@@ -45,7 +45,6 @@ public class GestionPersistencia {
         input= new Scanner(archivo);
         while(input.hasNextLine()){
             String line = input.nextLine();
-            System.out.println(line);
             alumnos.add(procesaDatos(line));
         }
         input.close();
