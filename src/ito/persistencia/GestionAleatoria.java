@@ -120,7 +120,7 @@ public class GestionAleatoria {
                     alumno=null;
                 }
             }
-        }catch(IOException e){}
+        }catch(IOException e){ System.err.println(e.getMessage());}
         return alumno;
     }
 
