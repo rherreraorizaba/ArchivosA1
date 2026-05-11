@@ -1,6 +1,7 @@
 package ito.data;
 
 import ito.persistencia.GestionPersistencia;
+import ito.persistencia.PersistenciaBinaria;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,10 +10,21 @@ public class ListaAlumnos {
 
     private ArrayList<Alumno> alumnos;
     private GestionPersistencia gp;
+    private PersistenciaBinaria pb;
 
     public ListaAlumnos(String nombreArchivo) {
         this.gp = new GestionPersistencia(nombreArchivo);
-        recuperarDatos();
+        this.pb= new PersistenciaBinaria(nombreArchivo);
+        //recuperarDatos();
+        recuperaBinarios();
+    }
+
+    private void recuperaBinarios(){
+     try{
+         alumnos=pb.leerDatos();
+     } catch (FileNotFoundException e) {
+         alumnos=new ArrayList<>();
+     }
     }
 
     private void recuperarDatos() {
@@ -21,6 +33,10 @@ public class ListaAlumnos {
         }catch(FileNotFoundException e){
             alumnos=new ArrayList<>();
         }
+    }
+
+    public void salvarBinarios() throws FileNotFoundException {
+        pb.guardaDatos(alumnos);
     }
 
     public void salvarDatos() throws FileNotFoundException {

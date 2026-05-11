@@ -65,15 +65,7 @@ public class Validacion {
     }
 
     public boolean leerBoolean(String texto,String verdadero,String falso,String error){
-        String valor=null;
-        do {
-            System.out.print(texto);
-            valor = input.nextLine();
-            if (valor == null || valor.isEmpty() || valor.compareTo(verdadero) != 0 && valor.compareTo(falso) == 0) {
-                System.err.println("El valor introducido no es valido!!");
-                valor = null;
-            }
-        }while(valor==null);
+        String valor=leerString(String.format("Es el alumno a eliminar:[%s/%s]:",verdadero,falso), Arrays.asList(verdadero,falso),"Opción no valida!!");
         return valor.compareTo(verdadero)==0;
     }
 

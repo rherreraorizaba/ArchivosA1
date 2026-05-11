@@ -16,7 +16,7 @@ public class GestionPersistencia {
     private String nombreArchivo;
 
     public GestionPersistencia(String nombreArchivo)  {
-        this.nombreArchivo = nombreArchivo;
+        this.nombreArchivo = nombreArchivo+".txt";
     }
 
     public void guardaDatos(ArrayList<Alumno> alumnos) throws FileNotFoundException {
