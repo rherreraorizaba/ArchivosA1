@@ -56,6 +56,15 @@ public class GestionAleatoria {
         }catch(IOException e){}
     }
 
+    public void gardarAlumnos(ArrayList<Alumno> alumnos){
+        try{
+            this.open();
+            for(Alumno alumno:alumnos)
+                this.escribirAlumno(alumno);
+            this.close();
+        }catch(IOException e){}
+    }
+
     public void agregarAlumno(Alumno alumno) throws FileNotFoundException {
         if(alumno==null)
             throw new NullPointerException("Alumno invalido!!");
@@ -92,11 +101,11 @@ public class GestionAleatoria {
         return alumno;
     }
 
-    public void eliminarAlumno(Alumno alumno) throws FileNotFoundException {
+    public void eliminarAlumno(Alumno alumno)  {
         if(alumno==null)
             throw new NullPointerException("Alumno invalido!!");
-        this.open();
         try {
+            this.open();
             Alumno alumArchivo= obtenerAlumno(alumno.getNumeroControl());
             if (alumArchivo!=null && alumno.equals(alumArchivo)) {
                 archivo.seek(archivo.getFilePointer()-size);
@@ -109,7 +118,7 @@ public class GestionAleatoria {
         }catch(IOException e){}
     }
 
-    public Alumno buscarAlumno(long numeroControl) throws FileNotFoundException {
+    public Alumno buscarAlumno(long numeroControl) {
         Alumno alumno=null;
         try{
             this.open();
@@ -120,16 +129,90 @@ public class GestionAleatoria {
                     alumno=null;
                 }
             }
-        }catch(IOException e){ System.err.println(e.getMessage());}
+        }catch(IOException e){ }
         return alumno;
     }
+
+    public Alumno buscarAlumno(int numeroRegistro){
+        Alumno alumno=null;
+        int nr=0;
+        try{
+            this.open();
+            while(true) {
+                alumno = obtenerAlumno();
+                if(alumno!=null)
+                    if (++nr == numeroRegistro)
+                        break;
+            }
+        }catch(IOException e){ alumno=null;}
+        try{
+            this.close();
+        }catch(IOException e){}
+        return alumno;
+    }
+
+    public Alumno obtenerAlumno(){
+        Alumno alumno=null;
+       try {
+           if (!archivo.readBoolean()){
+               long nc=archivo.readLong();
+               String nombre=archivo.readUTF();
+               byte semestre=archivo.readByte();
+               String carrera=archivo.readUTF();
+               float promedio=archivo.readFloat();
+               Genero genero=Genero.values()[archivo.readByte()];
+               alumno=new Alumno(nc,nombre,semestre,carrera,promedio,genero);
+           }else
+               archivo.seek(archivo.getFilePointer()+(size-1));
+       }catch (IOException e){}
+       return alumno;
+    }
+
+
 
     public long getNumeroRegistros(){
         long numeroRegistros=0;
         try {
             this.open();
-            numeroRegistros=archivo.length()/size;this.close();
+            while(true){
+                if(!archivo.readBoolean())
+                    numeroRegistros++;
+                archivo.seek(archivo.getFilePointer()+(size-1));
+            }
+        }catch(IOException e){}
+        try {
+            this.close();
         }catch(IOException e){}
         return numeroRegistros;
+    }
+
+    public void actualizaAlumno(Alumno alumno){
+        try{
+            this.open();
+            archivo.seek(1);
+            while(true){
+                if(archivo.readLong()==alumno.getNumeroControl()){
+                    archivo.writeUTF(String.format("%-30s",alumno.getNombre()));
+                    archivo.writeByte(alumno.getSemestre());
+                    archivo.writeUTF(String.format("%-15s",alumno.getCarrera()));
+                    archivo.writeFloat(alumno.getPromedio());
+                    break;
+                }
+                archivo.seek(archivo.getFilePointer()+offset+1);
+            }
+        }catch(IOException e){}
+        try{
+            this.close();
+        }catch(IOException e){}
+    }
+
+    public void recuperarAlumnosEliminados(){
+        try{
+            this.open();
+            while(true){
+                archivo.writeBoolean(false);
+                archivo.seek(archivo.getFilePointer()+(size-1));
+            }
+        }catch(IOException e){}
     }
 }

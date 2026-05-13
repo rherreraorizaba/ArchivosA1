@@ -2,6 +2,7 @@ package ito.ui;
 
 import ito.data.Alumno;
 import ito.data.ListaAlumnos;
+import ito.persistencia.GestionAleatoria;
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -110,6 +111,8 @@ public class Principal {
             }
         }while(opcion!=6);
         //alumnos.salvarDatos();   Salva datos en formato de texto
-        alumnos.salvarBinarios(); // Salva datos en formato binario
+        //alumnos.salvarBinarios(); // Salva datos en formato binario
+        GestionAleatoria ga= new GestionAleatoria("alumnos.rand");
+        ga.gardarAlumnos(alumnos.getAlumnos());
     }
 }

@@ -42,21 +42,18 @@ public class Principal2 {
         Alumno alumno=validacion.leerAlumno();
         try {
             archivo.agregarAlumno(alumno);
-        }catch(IllegalArgumentException e){
-            System.err.println(e.getMessage());
+        }catch(IllegalArgumentException | FileNotFoundException e){
             System.err.println("El alumno no fue agregado!!");
         }
     }
 
     private void eliminarAlumno(){
         long nc=validacion.leerNumeroControl();
-       /* Alumno alumno = alumnos.getAlumno(nc);
-        if(alumno!=null){
-            visualizacion.visualizaAlumno(alumno);
-            if(validacion.leerBoolean("Es el alumno a eliminar[Si/No]","Si","No","Debes escribir Si o No!!"))
-                alumnos.deleteAlumno(alumno);
-        }else
-            System.out.println("El alumno no se localizo!!");*/
+        Alumno alumno=archivo.buscarAlumno(nc);
+        visualizacion.visualizaAlumno(alumno);
+        boolean respuesta=validacion.leerBoolean("Es el alumno a eliminar:[Si/No]:","Si","No","Opcion invalidad!!");
+        if(respuesta)
+            archivo.eliminarAlumno(alumno);
     }
 
     private void modificaAlumno(Alumno alumno){
@@ -77,25 +74,24 @@ public class Principal2 {
 
     private void modificarAlumno(){
         long nc=validacion.leerNumeroControl();
-      /*  Alumno alumno = alumnos.getAlumno(nc);
-        if(alumno!=null) {
-            visualizacion.visualizaAlumno(alumno);
-            modificaAlumno(alumno);
-        }else
-            System.out.println("El alumno no se localizo!!");*/
+        Alumno alumno=archivo.buscarAlumno(nc);
+        visualizacion.visualizaAlumno(alumno);
+        modificaAlumno(alumno);
+        archivo.eliminarAlumno(alumno);
     }
 
     private void mostrarAlumno(){
         long nc=validacion.leerNumeroControl();
-       /* Alumno alumno = alumnos.getAlumno(nc);
-        if(alumno!=null)
-            visualizacion.visualizaAlumno(alumno);
-        else
-            System.out.println("El alumno no se localizo!!");*/
+        Alumno alumno=archivo.buscarAlumno(nc);
+        visualizacion.visualizaAlumno(alumno);
     }
 
     private void listarAlumnos(){
-       /* visualizacion.visualizaTodos(alumnos.getAlumnos());*/
+       long numReg=archivo.getNumeroRegistros();
+       for(int i=1;i<=numReg;i++){
+           Alumno alumno=archivo.buscarAlumno(i);
+           visualizacion.visualizaAlumno(alumno);
+       }
     }
 
 
@@ -111,7 +107,5 @@ public class Principal2 {
                 case 5: listarAlumnos();
             }
         }while(opcion!=6);
-
-
     }
 }

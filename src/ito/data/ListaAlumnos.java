@@ -15,8 +15,8 @@ public class ListaAlumnos {
     public ListaAlumnos(String nombreArchivo) {
         this.gp = new GestionPersistencia(nombreArchivo);
         this.pb= new PersistenciaBinaria(nombreArchivo);
-        //recuperarDatos();
-        recuperaBinarios();
+        recuperarDatos();
+        //recuperaBinarios();
     }
 
     private void recuperaBinarios(){

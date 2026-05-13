@@ -1,6 +1,6 @@
 package ito.app;
 
-import ito.ui.Principal;
+import ito.ui.Principal2;
 
 
 import java.io.FileNotFoundException;
@@ -8,6 +8,6 @@ import java.io.FileNotFoundException;
 public class MyApp {
 
     public static void main(String[] args) throws FileNotFoundException {
-         new Principal().run();
+         new Principal2().run();
     }
 }
