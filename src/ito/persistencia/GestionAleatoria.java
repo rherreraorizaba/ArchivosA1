@@ -198,7 +198,7 @@ public class GestionAleatoria {
                     archivo.writeFloat(alumno.getPromedio());
                     break;
                 }
-                archivo.seek(archivo.getFilePointer()+offset+1);
+                archivo.seek(archivo.getFilePointer()+offset);
             }
         }catch(IOException e){}
         try{

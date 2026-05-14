@@ -63,6 +63,7 @@ public class Principal2 {
        menu+="3.- Modificar semestre\n";
        menu+="4.- Modificar promedio\n";
        menu+="Indica la opción:[1..4]:";
+       visualizacion.visualizaAlumno(alumno);
        byte opcion=(byte)validacion.leerLong(menu,1,4,"Opcion equivocada!!");
        switch(opcion){
            case 1:alumno.setNombre(validacion.leerNombre());break;
@@ -75,15 +76,17 @@ public class Principal2 {
     private void modificarAlumno(){
         long nc=validacion.leerNumeroControl();
         Alumno alumno=archivo.buscarAlumno(nc);
-        visualizacion.visualizaAlumno(alumno);
-        modificaAlumno(alumno);
-        archivo.eliminarAlumno(alumno);
+        if(alumno!=null) {
+            modificaAlumno(alumno);
+            archivo.actualizaAlumno(alumno);
+        }
     }
 
     private void mostrarAlumno(){
         long nc=validacion.leerNumeroControl();
         Alumno alumno=archivo.buscarAlumno(nc);
-        visualizacion.visualizaAlumno(alumno);
+        if(alumno!=null)
+            visualizacion.visualizaAlumno(alumno);
     }
 
     private void listarAlumnos(){
