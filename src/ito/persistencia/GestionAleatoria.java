@@ -210,6 +210,8 @@ public class GestionAleatoria {
         try{
             this.open();
             while(true){
+                archivo.readBoolean();
+                archivo.seek(archivo.getFilePointer()-1);
                 archivo.writeBoolean(false);
                 archivo.seek(archivo.getFilePointer()+(size-1));
             }

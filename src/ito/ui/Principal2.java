@@ -30,12 +30,13 @@ public class Principal2 {
         menu+="3.- Modificar alumno\n";
         menu+="4.- Consultar alumno\n";
         menu+="5.- Listar alumnos\n";
-        menu+="6.- Salir\n";
-        menu+="Proporciona opcion:[1..6]:";
+        menu+="6.- Recuperar Alumnos eliminados\n";
+        menu+="7.- Salir\n";
+        menu+="Proporciona opcion:[1..7]:";
     }
 
     private byte leerOpcion(){
-        return (byte)validacion.leerLong(menu,1,6,"Opcion invalida!!");
+        return (byte)validacion.leerLong(menu,1,7,"Opcion invalida!!");
     }
 
     private void agregarAlumno(){
@@ -107,8 +108,9 @@ public class Principal2 {
                 case 2: eliminarAlumno();break;
                 case 3: modificarAlumno();break;
                 case 4: mostrarAlumno();break;
-                case 5: listarAlumnos();
+                case 5: listarAlumnos();break;
+                case 6:archivo.recuperarAlumnosEliminados();
             }
-        }while(opcion!=6);
+        }while(opcion!=7);
     }
 }
